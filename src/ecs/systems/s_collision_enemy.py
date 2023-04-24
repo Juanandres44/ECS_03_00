@@ -1,12 +1,15 @@
 import esper
-
+import json
 from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_transform import CTransform
 from src.ecs.components.tags.c_tag_bullet import CTagBullet
 from src.ecs.components.tags.c_tag_enemy import CTagEnemy
-from src.ecs.components.tags.c_tag_player import CTagPlayer
+from src.create.prefab_creator import create_explosion
+
 
 def system_collision_enemy(world:esper.World, player_entity:int):
+    with open("assets/cfg/explosion.json") as explosion_file:
+            explosion_cfg = json.load(explosion_file)
     c_pl_s = world.component_for_entity(player_entity, CSurface)
     c_pl_tr = world.component_for_entity(player_entity, CTransform)
     pl_rect = c_pl_s.surf.get_rect(topleft=c_pl_tr.pos)
@@ -23,6 +26,7 @@ def system_collision_enemy(world:esper.World, player_entity:int):
         for bullet_entity,  (_, c_bull_s, c_bull_tr) in bullet_components:
             bull_rect = c_bull_s.surf.get_rect(topleft=c_bull_tr.pos)
             if ene_rect.colliderect(bull_rect):
+                create_explosion(world, c_ene_tr.pos, explosion_cfg)
                 world.delete_entity(ene_entity)
                 world.delete_entity(bullet_entity)
 

@@ -1,8 +1,8 @@
 {
-    "image":"assets/img/player.png",
-    "animations":{
+    "image": "assets/img/player.png",
+    "animations": {
         "number_frames": 4,
-        "list":[
+        "list": [
             {
                 "name": "MOVE",
                 "start": 0,
